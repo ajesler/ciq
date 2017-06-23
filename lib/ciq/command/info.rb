@@ -1,5 +1,7 @@
 require "ciq/manifest"
 require "ciq/manifest_parser"
+require "ciq/project"
+require "ciq/load_project"
 
 module Ciq
   module Command
@@ -11,11 +13,12 @@ module Ciq
       end
 
       def run
-        puts "Reading manifest"
-        parser = ManifestParser.new(manifest_path)
+        parser = ManifestParser.new
 
         begin
           manifest = parser.parse
+          project_loader = LoadProject.new(manifest)
+          project = project_loader.call
         rescue CiqError => e
           puts e.message
           return
@@ -24,7 +27,11 @@ module Ciq
         puts "App Name: #{manifest.app_name}"
         puts "App Id:   #{manifest.app_id}"
         puts "App Type: #{manifest.app_type}"
-        puts "Supported Products: #{manifest.supported_products.join(',')}"
+        puts "Supported Products: #{manifest.supported_products.join(', ')}"
+        puts
+        puts "Sources: #{project.sources.join(', ')}"
+        puts "Resources: #{project.resources.join(', ')}"
+        puts "Tests: #{project.tests.join(', ')}"
       end
 
       private

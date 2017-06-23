@@ -7,8 +7,7 @@ module Ciq
     class_option :verbose, type: :boolean
     class_option :dry_run, type: :boolean, desc: "Print the ConnectIQ commands that would be run, but don't run any"
 
-    desc "manifest", "Display information from the manifest"
-    option :file, default: "manifest.xml", desc: "The path to a ConnecIQ manifest file"
+    desc "info", "Display information about the project"
     def info
       Command::Info.new(options).run
     end
