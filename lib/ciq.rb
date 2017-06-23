@@ -1,5 +1,3 @@
 require "ciq/version"
-
-module Ciq
-  # Your code goes here...
-end
+require "ciq/errors"
+require "ciq/cli"
