@@ -6,38 +6,22 @@ require "ciq/load_project"
 module Ciq
   module Command
     class Info
-      attr_reader :options
+      attr_reader :project, :options
 
-      def initialize(options)
+      def initialize(project, options)
+        @project = project
         @options = options
       end
 
       def run
-        parser = ManifestParser.new
-
-        begin
-          manifest = parser.parse
-          project_loader = LoadProject.new(manifest)
-          project = project_loader.call
-        rescue CiqError => e
-          puts e.message
-          return
-        end
-
-        puts "App Name: #{manifest.app_name}"
-        puts "App Id:   #{manifest.app_id}"
-        puts "App Type: #{manifest.app_type}"
-        puts "Supported Products: #{manifest.supported_products.join(', ')}"
+        puts "App Name: #{project.manifest.app_name}"
+        puts "App Id:   #{project.manifest.app_id}"
+        puts "App Type: #{project.manifest.app_type}"
+        puts "Supported Products: #{project.manifest.supported_products.join(', ')}"
         puts
         puts "Sources: #{project.sources.join(', ')}"
         puts "Resources: #{project.resources.join(', ')}"
         puts "Tests: #{project.tests.join(', ')}"
-      end
-
-      private
-
-      def manifest_path
-        options.fetch(:file, "manifest.xml")
       end
     end
   end
